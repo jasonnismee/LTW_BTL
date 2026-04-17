@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="layout/main-layout :: head('Lịch sử đơn user')"></th:block>
+</head>
+<body>
+<th:block th:replace="layout/main-layout :: topnav"></th:block>
+
+<div class="container py-4">
+  <a th:href="@{/admin/users}" class="btn btn-link px-0"><i class="bi bi-arrow-left"></i> Quay lại</a>
+  <h3 class="mb-3">Đơn của <span th:text="${user.username}">user</span></h3>
+
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead>
+      <tr>
+        <th>Mã</th>
+        <th>Type</th>
+        <th>Status</th>
+        <th class="text-end">Final</th>
+        <th>Created</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="o : ${orders}">
+        <td th:text="${o.id}">0</td>
+        <td th:text="${o.type}">ONLINE</td>
+        <td th:text="${o.status}">PENDING</td>
+        <td class="text-end" th:text="${#numbers.formatDecimal(o.finalPrice,0,'COMMA',0,'POINT')} + ' ₫'">0</td>
+        <td th:text="${o.createdAt}">-</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<th:block th:replace="layout/main-layout :: scripts"></th:block>
+</body>
+</html>
+

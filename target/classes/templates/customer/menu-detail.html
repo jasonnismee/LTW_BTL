@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="layout/main-layout :: head('Chi tiết món')"></th:block>
+</head>
+<body>
+<th:block th:replace="layout/main-layout :: topnav"></th:block>
+
+<div class="container py-4">
+  <a th:href="@{/customer/home}" class="btn btn-link px-0"><i class="bi bi-arrow-left"></i> Quay lại</a>
+  <div class="row g-4">
+    <div class="col-md-5">
+      <img th:if="${item.imageUrl}" th:src="${item.imageUrl}" class="img-fluid rounded border">
+      <div th:unless="${item.imageUrl}" class="rounded border bg-light d-flex align-items-center justify-content-center" style="height: 260px;">
+        <span class="text-muted">No image</span>
+      </div>
+    </div>
+    <div class="col-md-7">
+      <h3 th:text="${item.name}">Name</h3>
+      <div class="fs-4 fw-bold text-primary mb-2" th:text="${#numbers.formatDecimal(item.price,0,'COMMA',0,'POINT')} + ' ₫'"></div>
+      <div class="text-muted mb-3" th:text="${item.description} ?: 'Không có mô tả'"></div>
+      <form th:action="@{/customer/cart/add}" method="post" class="card card-body">
+        <input type="hidden" name="menuItemId" th:value="${item.id}">
+        <div class="row g-2 align-items-end">
+          <div class="col-4">
+            <label class="form-label">Số lượng</label>
+            <input type="number" name="quantity" value="1" min="1" class="form-control" required>
+          </div>
+          <div class="col-8 text-end">
+            <button class="btn btn-primary" type="submit"><i class="bi bi-cart-plus"></i> Thêm vào giỏ</button>
+            <a class="btn btn-outline-secondary" th:href="@{/customer/cart}">Xem giỏ</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<th:block th:replace="layout/main-layout :: footer"></th:block>
+<th:block th:replace="layout/main-layout :: scripts"></th:block>
+</body>
+</html>
+

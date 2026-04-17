@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="layout/main-layout :: head('Customer Home')"></th:block>
+</head>
+<body>
+<th:block th:replace="layout/main-layout :: topnav"></th:block>
+
+<div class="container py-4">
+  <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+  <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+  <div class="row g-3 align-items-end mb-3">
+    <div class="col-md-5">
+      <label class="form-label">Tìm kiếm</label>
+      <form method="get" th:action="@{/customer/home}">
+        <div class="input-group">
+          <input class="form-control" name="q" th:value="${q}" placeholder="Tên món...">
+          <input type="hidden" name="categoryId" th:value="${categoryId}">
+          <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search"></i></button>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Danh mục</label>
+      <form method="get" th:action="@{/customer/home}">
+        <select class="form-select" name="categoryId" onchange="this.form.submit()">
+          <option th:selected="${categoryId == null}" value="">Tất cả</option>
+          <option th:each="c : ${categories}"
+                  th:value="${c.id}"
+                  th:selected="${categoryId != null and c.id == categoryId}"
+                  th:text="${c.name}">Category</option>
+        </select>
+        <input type="hidden" name="q" th:value="${q}">
+      </form>
+    </div>
+    <div class="col-md-3 text-md-end">
+      <a class="btn btn-outline-secondary" th:href="@{/customer/orders}"><i class="bi bi-receipt"></i> Đơn hàng</a>
+      <a class="btn btn-primary" th:href="@{/customer/cart}"><i class="bi bi-cart"></i> Giỏ hàng</a>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-3" th:each="item : ${items}">
+      <div class="card h-100">
+        <img th:if="${item.imageUrl}" th:src="${item.imageUrl}" class="card-img-top" style="height: 160px; object-fit: cover;">
+        <div class="card-body">
+          <h6 class="card-title" th:text="${item.name}">Item</h6>
+          <div class="fw-bold text-primary" th:text="${#numbers.formatDecimal(item.price,0,'COMMA',0,'POINT')} + ' ₫'">0</div>
+          <div class="small text-muted" th:text="${item.category != null ? item.category.name : ''}"></div>
+        </div>
+        <div class="card-footer bg-white border-0">
+          <div class="d-flex gap-2">
+            <a class="btn btn-sm btn-outline-secondary" th:href="@{'/customer/menu/' + ${item.id}}">Chi tiết</a>
+            <form class="d-flex gap-2 ms-auto" th:action="@{/customer/cart/add}" method="post">
+              <input type="hidden" name="menuItemId" th:value="${item.id}">
+              <input type="number" name="quantity" value="1" min="1" class="form-control form-control-sm" style="width: 80px;">
+              <button class="btn btn-sm btn-primary" type="submit">Thêm</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<th:block th:replace="layout/main-layout :: footer"></th:block>
+<th:block th:replace="layout/main-layout :: scripts"></th:block>
+</body>
+</html>
+

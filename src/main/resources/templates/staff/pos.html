@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="layout/main-layout :: head('POS')"></th:block>
+</head>
+<body>
+<th:block th:replace="layout/main-layout :: topnav"></th:block>
+
+<div class="container-fluid py-3">
+  <div class="row g-3">
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-header">Bàn</div>
+        <div class="card-body">
+          <div class="row g-2">
+            <div class="col-4" th:each="t : ${tables}">
+              <a th:href="@{'/staff/pos/table/' + ${t.id}}"
+                 class="btn w-100"
+                 th:classappend="${t.status.name() == 'EMPTY'} ? 'btn-success' : 'btn-danger'">
+                Bàn <span th:text="${t.tableNumber}">1</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span>Menu (AVAILABLE)</span>
+          <form method="get" th:action="@{/staff/pos}" class="d-flex gap-2">
+            <input class="form-control form-control-sm" style="width: 260px;" name="q" th:value="${q}" placeholder="Tìm món...">
+            <button class="btn btn-sm btn-outline-primary" type="submit"><i class="bi bi-search"></i></button>
+          </form>
+        </div>
+        <div class="card-body">
+          <div class="row g-2">
+            <div class="col-md-4" th:each="m : ${menuItems}">
+              <div class="border rounded p-2 h-100">
+                <div class="fw-semibold" th:text="${m.name}">Name</div>
+                <div class="small text-muted" th:text="${m.category != null ? m.category.name : ''}"></div>
+                <div class="fw-bold text-primary" th:text="${#numbers.formatDecimal(m.price,0,'COMMA',0,'POINT')} + ' ₫'">0</div>
+                <div class="small text-muted mt-2">Chọn bàn để thêm món</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<th:block th:replace="layout/main-layout :: scripts"></th:block>
+</body>
+</html>
+

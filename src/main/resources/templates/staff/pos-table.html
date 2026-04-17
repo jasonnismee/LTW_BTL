@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="layout/main-layout :: head('POS - Bàn')"></th:block>
+</head>
+<body>
+<th:block th:replace="layout/main-layout :: topnav"></th:block>
+
+<div class="container-fluid py-3">
+  <div class="row g-3">
+    <div class="col-lg-3">
+      <div class="card">
+        <div class="card-header">Bàn</div>
+        <div class="card-body">
+          <div class="row g-2">
+            <div class="col-6" th:each="t : ${tables}">
+              <a th:href="@{'/staff/pos/table/' + ${t.id}}"
+                 class="btn w-100"
+                 th:classappend="${t.status.name() == 'EMPTY'} ? 'btn-success' : 'btn-danger'">
+                <span th:text="${t.tableNumber}">1</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between">
+          <span>
+            Bàn #<span th:text="${tableId}">0</span>
+            <span class="badge bg-secondary ms-2" th:if="${order != null}" th:text="'Order #' + ${order.id}">Order</span>
+          </span>
+          <a class="btn btn-sm btn-outline-success" th:href="@{'/staff/pos/table/' + ${tableId} + '/checkout'}">Thanh toán</a>
+        </div>
+        <div class="card-body">
+          <div th:if="${#lists.isEmpty(details)}" class="alert alert-info mb-0">Chưa có món.</div>
+          <div th:unless="${#lists.isEmpty(details)}" class="table-responsive">
+            <table class="table align-middle">
+              <thead>
+              <tr>
+                <th>Món</th>
+                <th class="text-center">SL</th>
+                <th class="text-end">Thành tiền</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="d : ${details}">
+                <td th:text="${d.menuItem.name}">Name</td>
+                <td class="text-center">
+                  <form th:action="@{'/staff/pos/table/' + ${tableId} + '/update-item'}" method="post" class="d-flex gap-2 justify-content-center">
+                    <input type="hidden" name="menuItemId" th:value="${d.menuItem.id}">
+                    <input type="number" name="quantity" min="1" class="form-control form-control-sm" style="width: 90px;" th:value="${d.quantity}">
+                    <button class="btn btn-sm btn-outline-primary" type="submit">OK</button>
+                  </form>
+                </td>
+                <td class="text-end" th:text="${#numbers.formatDecimal(d.subtotal,0,'COMMA',0,'POINT')} + ' ₫'">0</td>
+                <td class="text-end">
+                  <form th:action="@{'/staff/pos/table/' + ${tableId} + '/remove-item'}" method="post">
+                    <input type="hidden" name="menuItemId" th:value="${d.menuItem.id}">
+                    <button class="btn btn-sm btn-outline-danger" type="submit">Xóa</button>
+                  </form>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="text-end fw-bold mt-2">Tổng: <span th:text="${#numbers.formatDecimal(totalPrice,0,'COMMA',0,'POINT')} + ' ₫'">0</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span>Menu</span>
+          <form method="get" th:action="@{'/staff/pos/table/' + ${tableId}}" class="d-flex gap-2">
+            <input class="form-control form-control-sm" style="width: 220px;" name="q" th:value="${q}" placeholder="Tìm món...">
+            <button class="btn btn-sm btn-outline-primary" type="submit"><i class="bi bi-search"></i></button>
+          </form>
+        </div>
+        <div class="card-body">
+          <div class="row g-2">
+            <div class="col-12" th:each="m : ${menuItems}">
+              <div class="border rounded p-2">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <div class="fw-semibold" th:text="${m.name}">Name</div>
+                    <div class="small text-muted" th:text="${#numbers.formatDecimal(m.price,0,'COMMA',0,'POINT')} + ' ₫'">0</div>
+                  </div>
+                  <form th:action="@{'/staff/pos/table/' + ${tableId} + '/add-item'}" method="post" class="d-flex gap-2">
+                    <input type="hidden" name="menuItemId" th:value="${m.id}">
+                    <input type="number" name="quantity" value="1" min="1" class="form-control form-control-sm" style="width: 80px;">
+                    <button class="btn btn-sm btn-primary" type="submit">Thêm</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<th:block th:replace="layout/main-layout :: scripts"></th:block>
+</body>
+</html>
+

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="layout/main-layout :: head('Tạo Voucher')"></th:block>
+</head>
+<body>
+<th:block th:replace="layout/main-layout :: topnav"></th:block>
+
+<div class="container py-4" style="max-width: 900px;">
+  <h3 class="mb-3">Tạo Voucher</h3>
+  <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+  <form th:action="@{/admin/vouchers}" method="post" th:object="${voucher}" class="card card-body">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label class="form-label">Code</label>
+        <input class="form-control" th:field="*{code}" required minlength="4" maxlength="20">
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">%</label>
+        <input class="form-control" th:field="*{discountPercent}" type="number" min="1" max="100" required>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Type</label>
+        <select class="form-select" th:field="*{type}">
+          <option th:value="ONLINE_RANK_ONLY">ONLINE_RANK_ONLY</option>
+          <option th:value="OFFLINE_ALL">OFFLINE_ALL</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Min rank</label>
+        <select class="form-select" th:field="*{minRank}">
+          <option value="">(none)</option>
+          <option th:value="BRONZE">BRONZE</option>
+          <option th:value="SILVER">SILVER</option>
+          <option th:value="GOLD">GOLD</option>
+          <option th:value="DIAMOND">DIAMOND</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Min order</label>
+        <input class="form-control" th:field="*{minOrderAmount}" required>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Max discount</label>
+        <input class="form-control" th:field="*{maxDiscountAmount}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Quantity (-1 = unlimited)</label>
+        <input class="form-control" th:field="*{quantity}" type="number" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Start date</label>
+        <input class="form-control" th:field="*{startDate}" type="datetime-local" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">End date</label>
+        <input class="form-control" th:field="*{endDate}" type="datetime-local" required>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Active</label>
+        <select class="form-select" th:field="*{status}">
+          <option th:value="true">true</option>
+          <option th:value="false">false</option>
+        </select>
+      </div>
+    </div>
+    <div class="mt-3 text-end">
+      <button class="btn btn-success" type="submit">Lưu</button>
+      <a class="btn btn-outline-secondary" th:href="@{/admin/vouchers}">Hủy</a>
+    </div>
+  </form>
+</div>
+
+<th:block th:replace="layout/main-layout :: scripts"></th:block>
+</body>
+</html>
+

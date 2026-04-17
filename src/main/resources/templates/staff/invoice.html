@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="layout/main-layout :: head('Hóa đơn')"></th:block>
+</head>
+<body>
+<th:block th:replace="layout/main-layout :: topnav"></th:block>
+
+<div class="container py-5" style="max-width: 720px;">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">Hóa đơn</h3>
+    <a class="btn btn-outline-secondary" th:href="@{/staff/pos}">Về POS</a>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div><b>Mã đơn:</b> <span th:text="${order.id}">0</span></div>
+      <div><b>Loại:</b> <span th:text="${order.type}">OFFLINE</span></div>
+      <div><b>Trạng thái:</b> <span class="badge bg-success" th:text="${order.status}">COMPLETED</span></div>
+      <div th:if="${order.table != null}"><b>Bàn:</b> <span th:text="${order.table.tableNumber}">1</span></div>
+      <hr>
+      <h6 class="mb-2">Danh sách món</h6>
+      <div class="table-responsive">
+        <table class="table table-sm align-middle">
+          <thead>
+          <tr>
+            <th>Món</th>
+            <th class="text-end">Đơn giá</th>
+            <th class="text-center">SL</th>
+            <th class="text-end">Tạm tính</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="d : ${details}">
+            <td th:text="${d.menuItem.name}">Name</td>
+            <td class="text-end" th:text="${#numbers.formatDecimal(d.unitPrice,0,'COMMA',0,'POINT')} + ' ₫'">0</td>
+            <td class="text-center" th:text="${d.quantity}">1</td>
+            <td class="text-end" th:text="${#numbers.formatDecimal(d.subtotal,0,'COMMA',0,'POINT')} + ' ₫'">0</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <hr>
+      <div class="d-flex justify-content-between">
+        <div>Tổng</div>
+        <div th:text="${#numbers.formatDecimal(order.totalPrice,0,'COMMA',0,'POINT')} + ' ₫'">0</div>
+      </div>
+      <div class="d-flex justify-content-between">
+        <div>Giảm giá</div>
+        <div class="text-success" th:text="${#numbers.formatDecimal(order.discountAmount,0,'COMMA',0,'POINT')} + ' ₫'">0</div>
+      </div>
+      <div class="d-flex justify-content-between mt-2">
+        <div class="fw-bold">Thanh toán</div>
+        <div class="fw-bold text-danger" th:text="${#numbers.formatDecimal(order.finalPrice,0,'COMMA',0,'POINT')} + ' ₫'">0</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<th:block th:replace="layout/main-layout :: scripts"></th:block>
+</body>
+</html>
+

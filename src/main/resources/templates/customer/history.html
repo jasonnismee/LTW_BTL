@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="layout/main-layout :: head('Lịch sử đơn hàng')"></th:block>
+</head>
+<body>
+<th:block th:replace="layout/main-layout :: topnav"></th:block>
+
+<div class="container py-4">
+  <h3 class="mb-3">Lịch sử đơn hàng</h3>
+  <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+  <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead>
+      <tr>
+        <th>Mã đơn</th>
+        <th>Thời gian</th>
+        <th>Trạng thái</th>
+        <th class="text-end">Tổng</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="o : ${ordersPage.content}">
+        <td th:text="${o.id}">0</td>
+        <td th:text="${o.createdAt}">-</td>
+        <td>
+          <span class="badge"
+                th:classappend="${o.status.name() == 'PENDING'} ? 'bg-warning' :
+                                (${o.status.name() == 'PREPARING'} ? 'bg-info' :
+                                (${o.status.name() == 'DELIVERING'} ? 'bg-primary' :
+                                (${o.status.name() == 'COMPLETED'} ? 'bg-success' : 'bg-danger')))"
+                th:text="${o.status}">PENDING</span>
+        </td>
+        <td class="text-end" th:text="${#numbers.formatDecimal(o.totalPrice,0,'COMMA',0,'POINT')} + ' ₫'">0</td>
+        <td class="text-end">
+          <a class="btn btn-sm btn-outline-secondary" th:href="@{'/customer/orders/' + ${o.id}}">Chi tiết</a>
+          <form th:if="${o.status.name() == 'PENDING'}" th:action="@{'/customer/orders/' + ${o.id} + '/cancel'}" method="post" class="d-inline">
+            <button class="btn btn-sm btn-outline-danger" type="submit">Hủy</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <nav th:if="${ordersPage.totalPages > 1}" class="mt-3">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" th:classappend="${ordersPage.first} ? 'disabled' : ''">
+        <a class="page-link" th:href="@{/customer/orders(page=${ordersPage.number - 1}, size=${size})}">Trước</a>
+      </li>
+
+      <li class="page-item"
+          th:each="i : ${#numbers.sequence(0, ordersPage.totalPages - 1)}"
+          th:classappend="${i == ordersPage.number} ? 'active' : ''">
+        <a class="page-link" th:href="@{/customer/orders(page=${i}, size=${size})}" th:text="${i + 1}">1</a>
+      </li>
+
+      <li class="page-item" th:classappend="${ordersPage.last} ? 'disabled' : ''">
+        <a class="page-link" th:href="@{/customer/orders(page=${ordersPage.number + 1}, size=${size})}">Sau</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<th:block th:replace="layout/main-layout :: footer"></th:block>
+<th:block th:replace="layout/main-layout :: scripts"></th:block>
+</body>
+</html>
+

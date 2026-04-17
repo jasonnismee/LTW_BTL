@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="layout/main-layout :: head('Admin Dashboard')"></th:block>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<th:block th:replace="layout/sidebar-layout :: adminPage(${activeMenu}, ~{::section})">
+  <section>
+    <div class="container py-4">
+      <h3 class="mb-3">Dashboard</h3>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-body">
+              <div class="small text-muted">Doanh thu hôm nay</div>
+              <div class="fs-5 fw-bold" th:text="${#numbers.formatDecimal(revenueDay,0,'COMMA',0,'POINT')} + ' ₫'">0</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-body">
+              <div class="small text-muted">Đơn hôm nay (Online/Offline)</div>
+              <div class="fs-5 fw-bold"><span th:text="${onlineToday}">0</span> / <span th:text="${offlineToday}">0</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-body">
+              <div class="small text-muted">Bàn đang phục vụ</div>
+              <div class="fs-5 fw-bold" th:text="${occupiedTables}">0</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-body">
+              <div class="small text-muted">Đơn PENDING</div>
+              <div class="fs-5 fw-bold" th:text="${pendingCount}">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-lg-7">
+          <div class="card">
+            <div class="card-header">Doanh thu 7 ngày gần nhất</div>
+            <div class="card-body">
+              <canvas id="revenueChart" height="120"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="card">
+            <div class="card-header">Top 5 món bán chạy</div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                  <tr><th>Món</th><th class="text-end">SL</th></tr>
+                  </thead>
+                  <tbody>
+                  <tr th:each="t : ${topItems}">
+                    <td th:text="${t.menuItemName}">Name</td>
+                    <td class="text-end" th:text="${t.totalQuantity}">0</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</th:block>
+
+<th:block th:replace="layout/main-layout :: scripts"></th:block>
+<script th:inline="javascript">
+  const labels = [[${chartLabels}]];
+  const values = [[${chartValues}]];
+  const ctx = document.getElementById('revenueChart');
+  new Chart(ctx, {
+    type: 'line',
+    data: { labels, datasets: [{ label: 'Doanh thu', data: values, borderColor: '#0d6efd', tension: 0.3 }] },
+    options: { responsive: true, plugins: { legend: { display: false } } }
+  });
+</script>
+</body>
+</html>
+

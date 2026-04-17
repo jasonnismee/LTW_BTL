@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="layout/main-layout :: head('Online Orders')"></th:block>
+</head>
+<body>
+<th:block th:replace="layout/main-layout :: topnav"></th:block>
+
+<div class="container py-4">
+  <h3 class="mb-3">Đơn ONLINE</h3>
+  <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+  <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead>
+      <tr>
+        <th>Mã</th>
+        <th>Thời gian</th>
+        <th>Địa chỉ</th>
+        <th>Trạng thái</th>
+        <th class="text-end">Thanh toán</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="o: ${orders}">
+        <td th:text="${o.id}">0</td>
+        <td th:text="${o.createdAt}">-</td>
+        <td th:text="${o.deliveryAddress}">-</td>
+        <td><span class="badge bg-secondary" th:text="${o.status}">PENDING</span></td>
+        <td class="text-end" th:text="${#numbers.formatDecimal(o.finalPrice,0,'COMMA',0,'POINT')} + ' ₫'">0</td>
+        <td class="text-end">
+          <a class="btn btn-sm btn-outline-secondary" th:href="@{'/staff/orders/' + ${o.id} + '/detail'}">Chi tiết</a>
+          <form class="d-inline" th:action="@{'/staff/orders/' + ${o.id} + '/update-status'}" method="post">
+            <input type="hidden" name="newStatus"
+                   th:value="${o.status.name() == 'PENDING'} ? 'PREPARING' :
+                             (${o.status.name() == 'PREPARING'} ? 'DELIVERING' : 'COMPLETED')">
+            <button class="btn btn-sm btn-primary" type="submit"
+                    th:text="${o.status.name() == 'PENDING'} ? 'PREPARING' :
+                             (${o.status.name() == 'PREPARING'} ? 'DELIVERING' : 'COMPLETED')">
+              Next
+            </button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<th:block th:replace="layout/main-layout :: scripts"></th:block>
+</body>
+</html>
+

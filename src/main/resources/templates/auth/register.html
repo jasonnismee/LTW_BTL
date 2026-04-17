@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="layout/main-layout :: head('Đăng ký')"></th:block>
+</head>
+<body>
+<th:block th:replace="layout/main-layout :: topnav"></th:block>
+
+<div class="container py-5" style="max-width: 560px;">
+  <h3 class="mb-3">Đăng ký tài khoản</h3>
+
+  <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+  <form th:action="@{/auth/register}" method="post" th:object="${user}" class="card card-body">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Username</label>
+        <input class="form-control" th:field="*{username}" required minlength="3" maxlength="30">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-control" th:field="*{password}" required minlength="6">
+      </div>
+      <div class="col-12">
+        <label class="form-label">Họ và tên</label>
+        <input class="form-control" th:field="*{fullName}" required minlength="2" maxlength="100">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Số điện thoại</label>
+        <input class="form-control" th:field="*{phone}" required placeholder="0xxxxxxxxx">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Email (không bắt buộc)</label>
+        <input class="form-control" th:field="*{email}" type="email">
+      </div>
+    </div>
+    <button class="btn btn-success mt-3" type="submit">Tạo tài khoản</button>
+  </form>
+</div>
+
+<th:block th:replace="layout/main-layout :: scripts"></th:block>
+</body>
+</html>
+

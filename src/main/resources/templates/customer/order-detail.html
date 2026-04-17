@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="layout/main-layout :: head('Chi tiết đơn')"></th:block>
+</head>
+<body>
+<th:block th:replace="layout/main-layout :: topnav"></th:block>
+
+<div class="container py-4" style="max-width: 900px;">
+  <a th:href="@{/customer/orders}" class="btn btn-link px-0"><i class="bi bi-arrow-left"></i> Quay lại</a>
+  <h3 class="mb-3">Đơn #<span th:text="${order.id}">0</span></h3>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row g-2">
+        <div class="col-md-4"><b>Trạng thái:</b> <span th:text="${order.status}">PENDING</span></div>
+        <div class="col-md-4"><b>Loại:</b> <span th:text="${order.type}">ONLINE</span></div>
+        <div class="col-md-4"><b>Thanh toán:</b> <span th:text="${order.paymentMethod}">CASH</span></div>
+        <div class="col-12" th:if="${order.deliveryAddress}">
+          <b>Địa chỉ giao:</b> <span th:text="${order.deliveryAddress}"></span>
+        </div>
+        <div class="col-12" th:if="${order.customerNote}">
+          <b>Ghi chú:</b> <span th:text="${order.customerNote}"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-header">Danh sách món</div>
+    <div class="card-body table-responsive">
+      <table class="table table-sm align-middle mb-0">
+        <thead>
+        <tr>
+          <th>Món</th>
+          <th class="text-end">Đơn giá</th>
+          <th class="text-center">SL</th>
+          <th class="text-end">Tạm tính</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="d : ${details}">
+          <td th:text="${d.menuItem.name}">Name</td>
+          <td class="text-end" th:text="${#numbers.formatDecimal(d.unitPrice,0,'COMMA',0,'POINT')} + ' ₫'">0</td>
+          <td class="text-center" th:text="${d.quantity}">1</td>
+          <td class="text-end" th:text="${#numbers.formatDecimal(d.subtotal,0,'COMMA',0,'POINT')} + ' ₫'">0</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Giá trị đơn hàng</div>
+    <div class="card-body">
+      <div class="d-flex justify-content-between">
+        <div>Tổng</div>
+        <div th:text="${#numbers.formatDecimal(order.totalPrice,0,'COMMA',0,'POINT')} + ' ₫'">0</div>
+      </div>
+      <div class="d-flex justify-content-between">
+        <div>Giảm giá</div>
+        <div class="text-success" th:text="${#numbers.formatDecimal(order.discountAmount,0,'COMMA',0,'POINT')} + ' ₫'">0</div>
+      </div>
+      <div class="d-flex justify-content-between mt-2">
+        <div class="fw-bold">Thanh toán</div>
+        <div class="fw-bold text-danger" th:text="${#numbers.formatDecimal(order.finalPrice,0,'COMMA',0,'POINT')} + ' ₫'">0</div>
+      </div>
+    </div>
+    <div class="card-footer text-end">
+      <form th:if="${order.status.name() == 'PENDING'}" th:action="@{'/customer/orders/' + ${order.id} + '/cancel'}" method="post">
+        <button class="btn btn-outline-danger" type="submit">Hủy đơn</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<th:block th:replace="layout/main-layout :: footer"></th:block>
+<th:block th:replace="layout/main-layout :: scripts"></th:block>
+</body>
+</html>
+

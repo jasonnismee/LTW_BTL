@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="layout/main-layout :: head('POS Checkout')"></th:block>
+</head>
+<body>
+<th:block th:replace="layout/main-layout :: topnav"></th:block>
+
+<div class="container py-4" style="max-width: 900px;">
+  <h3 class="mb-3">Thanh toán bàn</h3>
+  <div class="card mb-3">
+    <div class="card-header">Bàn #<span th:text="${tableId}">0</span></div>
+    <div class="card-body">
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between" th:each="d : ${details}">
+          <div>
+            <div class="fw-semibold" th:text="${d.menuItem.name}">Name</div>
+            <div class="small text-muted">
+              <span th:text="${d.quantity}">1</span> ×
+              <span th:text="${#numbers.formatDecimal(d.unitPrice,0,'COMMA',0,'POINT')} + ' ₫'">0</span>
+            </div>
+          </div>
+          <div class="fw-bold" th:text="${#numbers.formatDecimal(d.subtotal,0,'COMMA',0,'POINT')} + ' ₫'">0</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <form th:action="@{'/staff/pos/table/' + ${tableId} + '/pay'}" method="post" th:object="${orderForm}" class="card">
+    <div class="card-header">Voucher & Thanh toán</div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Voucher (OFFLINE)</label>
+          <select class="form-select" name="voucherId">
+            <option value="">Không dùng</option>
+            <option th:each="v: ${vouchers}"
+                    th:value="${v.id}"
+                    th:selected="${bestVoucherId != null and v.id == bestVoucherId}"
+                    th:text="${v.code + ' - ' + v.discountPercent + '%'}">
+            </option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Phương thức</label>
+          <select class="form-select" th:field="*{paymentMethod}">
+            <option th:value="CASH">Tiền mặt</option>
+            <option th:value="BANKING">Chuyển khoản</option>
+          </select>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Ghi chú</label>
+          <textarea class="form-control" th:field="*{customerNote}" rows="2"></textarea>
+        </div>
+      </div>
+      <hr>
+      <div class="d-flex justify-content-between">
+        <div>Tổng</div>
+        <div class="fw-bold" th:text="${#numbers.formatDecimal(totalPrice,0,'COMMA',0,'POINT')} + ' ₫'">0</div>
+      </div>
+      <div class="text-end mt-3">
+        <button class="btn btn-success" type="submit">Thanh toán</button>
+        <a class="btn btn-outline-secondary" th:href="@{'/staff/pos/table/' + ${tableId}}">Quay lại</a>
+      </div>
+    </div>
+  </form>
+</div>
+
+<th:block th:replace="layout/main-layout :: scripts"></th:block>
+</body>
+</html>
+

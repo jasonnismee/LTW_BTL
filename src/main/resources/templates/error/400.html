@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="layout/main-layout :: head('400')"></th:block>
+</head>
+<body>
+<th:block th:replace="layout/main-layout :: topnav"></th:block>
+<div class="container py-5" style="max-width: 720px;">
+  <div class="alert alert-danger">
+    <h4 class="alert-heading">Yêu cầu không hợp lệ</h4>
+    <div th:text="${message}">Business error</div>
+    <div class="small text-muted mt-2" th:text="${path}">/</div>
+  </div>
+  <a class="btn btn-outline-primary" th:href="@{/}">Về trang chủ</a>
+</div>
+<th:block th:replace="layout/main-layout :: scripts"></th:block>
+</body>
+</html>
+

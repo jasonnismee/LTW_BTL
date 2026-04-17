@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="layout/main-layout :: head('Đặt hàng thành công')"></th:block>
+</head>
+<body>
+<th:block th:replace="layout/main-layout :: topnav"></th:block>
+
+<div class="container py-5" style="max-width: 720px;">
+  <div class="alert alert-success">
+    <h4 class="alert-heading">Đặt hàng thành công!</h4>
+    <div>Mã đơn: <b th:text="${order.id}">0</b></div>
+    <div>Trạng thái: <span class="badge bg-warning" th:text="${order.status}">PENDING</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Tóm tắt đơn hàng</div>
+    <div class="card-body">
+      <div class="d-flex justify-content-between">
+        <div>Tổng</div>
+        <div th:text="${#numbers.formatDecimal(order.totalPrice,0,'COMMA',0,'POINT')} + ' ₫'">0</div>
+      </div>
+      <div class="d-flex justify-content-between">
+        <div>Giảm giá</div>
+        <div class="text-success" th:text="${#numbers.formatDecimal(order.discountAmount,0,'COMMA',0,'POINT')} + ' ₫'">0</div>
+      </div>
+      <div class="d-flex justify-content-between mt-2">
+        <div class="fw-bold">Thanh toán</div>
+        <div class="fw-bold text-danger" th:text="${#numbers.formatDecimal(order.finalPrice,0,'COMMA',0,'POINT')} + ' ₫'">0</div>
+      </div>
+      <hr>
+      <div><b>Địa chỉ giao:</b> <span th:text="${order.deliveryAddress}"></span></div>
+    </div>
+    <div class="card-footer d-flex justify-content-end gap-2">
+      <a class="btn btn-outline-secondary" th:href="@{/customer/home}">Tiếp tục mua</a>
+      <a class="btn btn-primary" th:href="@{/customer/orders}">Xem lịch sử</a>
+    </div>
+  </div>
+</div>
+
+<th:block th:replace="layout/main-layout :: footer"></th:block>
+<th:block th:replace="layout/main-layout :: scripts"></th:block>
+</body>
+</html>
+

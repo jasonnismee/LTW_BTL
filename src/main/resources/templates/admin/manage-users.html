@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="layout/main-layout :: head('Quản lý User')"></th:block>
+</head>
+<body>
+<th:block th:replace="layout/main-layout :: topnav"></th:block>
+
+<div class="container py-4">
+  <h3 class="mb-3">Quản lý User</h3>
+  <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+  <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+  <form method="get" th:action="@{/admin/users}" class="row g-2 mb-3">
+    <div class="col-md-3">
+      <select class="form-select" name="role">
+        <option value="">All roles</option>
+        <option th:value="ADMIN" th:selected="${role != null and role.name() == 'ADMIN'}">ADMIN</option>
+        <option th:value="STAFF" th:selected="${role != null and role.name() == 'STAFF'}">STAFF</option>
+        <option th:value="CUSTOMER" th:selected="${role != null and role.name() == 'CUSTOMER'}">CUSTOMER</option>
+      </select>
+    </div>
+    <div class="col-md-5">
+      <input class="form-control" name="q" th:value="${q}" placeholder="Search username / fullName...">
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-outline-primary w-100" type="submit">Filter</button>
+    </div>
+  </form>
+
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead>
+      <tr>
+        <th>Username</th>
+        <th>Họ tên</th>
+        <th>Role</th>
+        <th>Rank</th>
+        <th>Status</th>
+        <th class="text-end"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="u : ${users}">
+        <td th:text="${u.username}">u</td>
+        <td th:text="${u.fullName}">name</td>
+        <td th:text="${u.role}">role</td>
+        <td th:text="${u.rank}">rank</td>
+        <td>
+          <span class="badge" th:classappend="${u.status.name() == 'ACTIVE'} ? 'bg-success' : 'bg-danger'"
+                th:text="${u.status}">ACTIVE</span>
+        </td>
+        <td class="text-end">
+          <a class="btn btn-sm btn-outline-secondary" th:href="@{'/admin/users/' + ${u.id} + '/orders'}">Orders</a>
+          <form th:if="${u.status.name() == 'ACTIVE'}" th:action="@{'/admin/users/' + ${u.id} + '/ban'}" method="post" class="d-inline">
+            <button class="btn btn-sm btn-outline-danger" type="submit">Ban</button>
+          </form>
+          <form th:if="${u.status.name() == 'BANNED'}" th:action="@{'/admin/users/' + ${u.id} + '/unban'}" method="post" class="d-inline">
+            <button class="btn btn-sm btn-outline-success" type="submit">Unban</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<th:block th:replace="layout/main-layout :: scripts"></th:block>
+</body>
+</html>
+
