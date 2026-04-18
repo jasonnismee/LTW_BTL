@@ -13,6 +13,7 @@
   <div class="card">
     <div class="card-body">
       <div><b>Trạng thái:</b> <span th:text="${order.status}">PENDING</span></div>
+      <div><b>Nhân viên xử lý:</b> <span th:text="${order.staff != null ? order.staff.fullName : '—'}">—</span></div>
       <div><b>Địa chỉ giao:</b> <span th:text="${order.deliveryAddress}">-</span></div>
       <hr>
       <h6 class="mb-2">Danh sách món</h6>

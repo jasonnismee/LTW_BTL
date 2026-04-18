@@ -83,10 +83,14 @@
                   <td th:text="${m.name}">Name</td>
                   <td th:text="${m.category != null ? m.category.name : ''}">Cat</td>
                   <td class="text-end" th:text="${#numbers.formatDecimal(m.price,0,'COMMA',0,'POINT')} + ' ₫'">0</td>
-                  <td><span class="badge bg-secondary" th:text="${m.status}">AVAILABLE</span></td>
+                  <td>
+                    <span th:if="${m.status.name() == 'AVAILABLE'}" class="badge bg-success">Đang bán</span>
+                    <span th:if="${m.status.name() == 'OUT_OF_STOCK'}" class="badge bg-warning text-dark">Hết hàng</span>
+                  </td>
                   <td class="text-end">
                     <form th:action="@{'/admin/menu/item/' + ${m.id} + '/toggle-status'}" method="post" class="d-inline">
-                      <button class="btn btn-sm btn-outline-primary" type="submit">Toggle</button>
+                      <button th:if="${m.status.name() == 'AVAILABLE'}" class="btn btn-sm btn-outline-secondary" type="submit">Đánh dấu hết hàng</button>
+                      <button th:if="${m.status.name() == 'OUT_OF_STOCK'}" class="btn btn-sm btn-outline-success" type="submit">Mở bán lại</button>
                     </form>
                     <form th:action="@{'/admin/menu/item/' + ${m.id}}" method="post" class="d-inline">
                       <input type="hidden" name="_method" value="delete">

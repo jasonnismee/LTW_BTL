@@ -4,6 +4,7 @@ import com.restaurant.exception.BusinessException;
 import com.restaurant.model.entity.Order;
 import com.restaurant.model.enums.OrderStatus;
 import com.restaurant.service.OrderService;
+import com.restaurant.util.SecurityUtils;
 import java.util.List;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/staff/orders")
-@PreAuthorize("hasAnyRole('STAFF','ADMIN')")
+@PreAuthorize("hasRole('STAFF')")
 public class StaffOrderController {
   private final OrderService orderService;
 
@@ -50,14 +51,14 @@ public class StaffOrderController {
                              RedirectAttributes redirectAttributes) {
     Order current = orderService.findById(id);
     if (newStatus == OrderStatus.CANCELLED) {
-      orderService.updateOrderStatus(id, OrderStatus.CANCELLED);
+      orderService.updateOrderStatus(id, OrderStatus.CANCELLED, SecurityUtils.currentUserId());
       redirectAttributes.addFlashAttribute("success", "Đã hủy đơn");
       return "redirect:/staff/orders/online";
     }
     if (!isForwardStep(current.getStatus(), newStatus)) {
       throw new BusinessException("Không cho phép cập nhật trạng thái quay ngược");
     }
-    orderService.updateOrderStatus(id, newStatus);
+    orderService.updateOrderStatus(id, newStatus, SecurityUtils.currentUserId());
     redirectAttributes.addFlashAttribute("success", "Đã cập nhật trạng thái");
     return "redirect:/staff/orders/online";
   }

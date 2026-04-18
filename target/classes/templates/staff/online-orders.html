@@ -18,6 +18,7 @@
         <th>Mã</th>
         <th>Thời gian</th>
         <th>Địa chỉ</th>
+        <th>Nhân viên</th>
         <th>Trạng thái</th>
         <th class="text-end">Thanh toán</th>
         <th></th>
@@ -28,6 +29,7 @@
         <td th:text="${o.id}">0</td>
         <td th:text="${o.createdAt}">-</td>
         <td th:text="${o.deliveryAddress}">-</td>
+        <td th:text="${o.staff != null ? o.staff.fullName : '—'}">-</td>
         <td><span class="badge bg-secondary" th:text="${o.status}">PENDING</span></td>
         <td class="text-end" th:text="${#numbers.formatDecimal(o.finalPrice,0,'COMMA',0,'POINT')} + ' ₫'">0</td>
         <td class="text-end">

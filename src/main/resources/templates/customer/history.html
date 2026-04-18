@@ -17,6 +17,7 @@
       <tr>
         <th>Mã đơn</th>
         <th>Thời gian</th>
+        <th>Nhân viên</th>
         <th>Trạng thái</th>
         <th class="text-end">Tổng</th>
         <th></th>
@@ -26,6 +27,7 @@
       <tr th:each="o : ${ordersPage.content}">
         <td th:text="${o.id}">0</td>
         <td th:text="${o.createdAt}">-</td>
+        <td th:text="${o.staff != null ? o.staff.fullName : '—'}">—</td>
         <td>
           <span class="badge"
                 th:classappend="${o.status.name() == 'PENDING'} ? 'bg-warning' :

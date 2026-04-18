@@ -1,6 +1,7 @@
 package com.restaurant.controller.admin;
 
 import com.restaurant.model.dto.VoucherDTO;
+import com.restaurant.model.enums.UserRank;
 import com.restaurant.model.enums.VoucherType;
 import com.restaurant.service.VoucherService;
 import jakarta.validation.Valid;
@@ -44,6 +45,7 @@ public class AdminVoucherController {
       dto.setType(VoucherType.ONLINE_RANK_ONLY);
       model.addAttribute("voucher", dto);
     }
+    model.addAttribute("ranks", UserRank.values());
     return "admin/voucher-form";
   }
 

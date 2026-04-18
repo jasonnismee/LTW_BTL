@@ -145,7 +145,7 @@ class OrderServiceTest {
     when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
     when(orderRepository.save(any(Order.class))).thenAnswer(inv -> inv.getArgument(0));
 
-    Order updated = orderService.updateOrderStatus(1L, OrderStatus.COMPLETED);
+    Order updated = orderService.updateOrderStatus(1L, OrderStatus.COMPLETED, null);
     assertEquals(OrderStatus.COMPLETED, updated.getStatus());
     verify(userService, times(1)).updateTotalSpendingAndRank(10L, new BigDecimal("123000"));
   }
@@ -165,7 +165,7 @@ class OrderServiceTest {
     when(orderRepository.findById(2L)).thenReturn(Optional.of(order));
     when(orderRepository.save(any(Order.class))).thenAnswer(inv -> inv.getArgument(0));
 
-    orderService.updateOrderStatus(2L, OrderStatus.COMPLETED);
+    orderService.updateOrderStatus(2L, OrderStatus.COMPLETED, null);
     verify(tableService, times(1)).autoEmptyTable(5L);
   }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.util.List;
 
 @Controller
 @RequestMapping("/customer/cart")
@@ -32,19 +33,40 @@ public class CartController {
   @PostMapping("/add")
   public String add(@RequestParam("menuItemId") @NotNull Long menuItemId,
                     @RequestParam("quantity") @NotNull @Min(1) Integer quantity,
+                    @RequestParam(value = "returnUrl", required = false) String returnUrl,
                     RedirectAttributes redirectAttributes) {
     cartService.addToCart(menuItemId, quantity);
     redirectAttributes.addFlashAttribute("success", "Đã thêm món vào giỏ hàng");
+    if (isSafeCustomerReturnUrl(returnUrl)) {
+      return "redirect:" + returnUrl;
+    }
     return "redirect:/customer/cart";
   }
 
-  @PostMapping("/update")
-  public String update(@RequestParam("menuItemId") @NotNull Long menuItemId,
-                       @RequestParam("quantity") @NotNull @Min(1) Integer quantity,
-                       RedirectAttributes redirectAttributes) {
-    cartService.updateQuantity(menuItemId, quantity);
-    redirectAttributes.addFlashAttribute("success", "Đã cập nhật số lượng");
-    return "redirect:/customer/cart";
+  /** Chỉ cho phép redirect nội bộ /customer/... để tránh open redirect. */
+  private static boolean isSafeCustomerReturnUrl(String url) {
+    if (url == null || url.isBlank()) {
+      return false;
+    }
+    String u = url.trim();
+    if (!u.startsWith("/customer/") || u.contains("..") || u.contains("//") || u.contains("\r") || u.contains("\n")) {
+      return false;
+    }
+    return true;
+  }
+
+  @PostMapping("/proceed-to-checkout")
+  public String proceedToCheckout(@RequestParam("menuItemId") List<Long> menuItemIds,
+                                    @RequestParam("quantity") List<Integer> quantities,
+                                    RedirectAttributes redirectAttributes) {
+    if (menuItemIds == null || quantities == null || menuItemIds.size() != quantities.size()) {
+      redirectAttributes.addFlashAttribute("error", "Dữ liệu giỏ hàng không hợp lệ");
+      return "redirect:/customer/cart";
+    }
+    for (int i = 0; i < menuItemIds.size(); i++) {
+      cartService.updateQuantity(menuItemIds.get(i), quantities.get(i));
+    }
+    return "redirect:/customer/checkout";
   }
 
   @PostMapping("/remove")

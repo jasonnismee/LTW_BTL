@@ -1,7 +1,9 @@
 com\restaurant\model\dto\VoucherDTO.class
 com\restaurant\model\entity\Category.class
+com\restaurant\controller\admin\AdminStaffController.class
 com\restaurant\model\enums\OrderType.class
 com\restaurant\service\impl\CategoryServiceImpl.class
+com\restaurant\model\dto\ProfileUpdateDTO.class
 com\restaurant\model\enums\UserRole.class
 com\restaurant\repository\OrderDetailRepository$TopMenuItem.class
 com\restaurant\security\CustomUserDetailsService.class
@@ -26,7 +28,9 @@ com\restaurant\model\enums\MenuItemStatus.class
 com\restaurant\service\MenuItemService.class
 com\restaurant\controller\HomeController.class
 com\restaurant\model\enums\TableStatus.class
+com\restaurant\controller\staff\StaffAccountController.class
 com\restaurant\config\WebSecurityConfig.class
+com\restaurant\controller\customer\CustomerAccountController.class
 com\restaurant\controller\admin\AdminUserController.class
 com\restaurant\service\VoucherService.class
 com\restaurant\repository\CategoryRepository.class
@@ -41,6 +45,7 @@ com\restaurant\repository\RestaurantTableRepository.class
 com\restaurant\controller\customer\CustomerHomeController.class
 com\restaurant\controller\staff\PosController.class
 com\restaurant\model\enums\VoucherType.class
+com\restaurant\controller\admin\AdminOrderController.class
 com\restaurant\model\enums\UserStatus.class
 com\restaurant\service\impl\RestaurantTableServiceImpl.class
 com\restaurant\controller\customer\CustomerOrderController.class
@@ -54,6 +59,7 @@ com\restaurant\model\enums\UserRank.class
 com\restaurant\model\entity\Order.class
 com\restaurant\util\AppConstants$SessionKeys.class
 com\restaurant\repository\VoucherRepository.class
+com\restaurant\model\dto\PasswordChangeDTO.class
 com\restaurant\config\WebMvcConfig.class
 com\restaurant\controller\customer\CheckoutController.class
 com\restaurant\model\dto\VoucherResult.class

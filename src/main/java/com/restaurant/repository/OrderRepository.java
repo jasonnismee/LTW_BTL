@@ -61,5 +61,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
   long countOrdersByTypeBetween(@Param("type") OrderType type,
                                @Param("from") LocalDateTime from,
                                @Param("to") LocalDateTime to);
+
+  List<Order> findByTypeAndCreatedAtBetweenOrderByCreatedAtDesc(OrderType type,
+                                                                  LocalDateTime from,
+                                                                  LocalDateTime to);
 }
 

@@ -16,6 +16,7 @@
         <div class="col-md-4"><b>Trạng thái:</b> <span th:text="${order.status}">PENDING</span></div>
         <div class="col-md-4"><b>Loại:</b> <span th:text="${order.type}">ONLINE</span></div>
         <div class="col-md-4"><b>Thanh toán:</b> <span th:text="${order.paymentMethod}">CASH</span></div>
+        <div class="col-12"><b>Nhân viên xử lý:</b> <span th:text="${order.staff != null ? order.staff.fullName : '—'}">—</span></div>
         <div class="col-12" th:if="${order.deliveryAddress}">
           <b>Địa chỉ giao:</b> <span th:text="${order.deliveryAddress}"></span>
         </div>

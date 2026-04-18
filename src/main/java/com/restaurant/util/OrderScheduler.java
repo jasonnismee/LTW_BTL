@@ -28,7 +28,7 @@ public class OrderScheduler {
     LocalDateTime before = LocalDateTime.now().minusMinutes(30);
     List<Order> expired = orderRepository.findPendingBefore(OrderStatus.PENDING, before);
     for (Order o : expired) {
-      orderService.updateOrderStatus(o.getId(), OrderStatus.CANCELLED);
+      orderService.updateOrderStatus(o.getId(), OrderStatus.CANCELLED, null);
     }
     if (!expired.isEmpty()) {
       log.info("Auto-cancelled {} pending orders older than 30 minutes", expired.size());

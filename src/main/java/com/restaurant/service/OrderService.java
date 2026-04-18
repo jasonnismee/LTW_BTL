@@ -5,8 +5,10 @@ import com.restaurant.model.dto.OrderDTO;
 import com.restaurant.model.entity.Order;
 import com.restaurant.model.entity.OrderDetail;
 import com.restaurant.model.enums.OrderStatus;
+import com.restaurant.model.enums.OrderType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.List;
 
@@ -37,10 +39,12 @@ public interface OrderService {
 
   Order removeItemFromOpenOfflineOrder(Long tableId, Long menuItemId);
 
-  Order checkoutOpenOfflineOrder(Long tableId, OrderDTO dto, Long voucherId);
+  Order checkoutOpenOfflineOrder(Long tableId, OrderDTO dto, Long voucherId, Long staffUserId);
 
-  Order updateOrderStatus(Long orderId, OrderStatus newStatus);
+  Order updateOrderStatus(Long orderId, OrderStatus newStatus, Long actingStaffId);
 
   Order cancelOrder(Long orderId);
+
+  List<Order> findOrdersByTypeBetween(OrderType type, LocalDateTime from, LocalDateTime to);
 }
 

@@ -1,0 +1,5 @@
+# Created at 2026-04-18T09:56:10.167
+Boot Manifest-JAR contains absolute paths in classpath 'D:\Documents\LTW\LTW_BTL\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+

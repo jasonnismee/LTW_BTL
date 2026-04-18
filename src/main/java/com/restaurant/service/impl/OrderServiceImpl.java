@@ -26,6 +26,7 @@ import com.restaurant.service.RestaurantTableService;
 import com.restaurant.service.UserService;
 import com.restaurant.service.VoucherService;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.ArrayList;
 import java.util.List;
@@ -306,7 +307,7 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public Order checkoutOpenOfflineOrder(Long tableId, OrderDTO dto, Long voucherId) {
+  public Order checkoutOpenOfflineOrder(Long tableId, OrderDTO dto, Long voucherId, Long staffUserId) {
     Order order = getOpenOfflineOrderByTable(tableId)
         .orElseThrow(() -> new BusinessException("Bàn chưa có đơn OFFLINE đang mở"));
 
@@ -342,16 +343,22 @@ public class OrderServiceImpl implements OrderService {
     order.setVoucher(voucher);
     order.setDiscountAmount(discountAmount);
     order.setFinalPrice(finalPrice);
+    if (staffUserId != null) {
+      order.setStaff(userService.findById(staffUserId));
+    }
     return orderRepository.save(order);
   }
 
   @Override
-  public Order updateOrderStatus(Long orderId, OrderStatus newStatus) {
+  public Order updateOrderStatus(Long orderId, OrderStatus newStatus, Long actingStaffId) {
     // BRIDGE 1: Staff cập nhật status -> Customer tracking đọc từ DB thấy trạng thái mới nhất.
     // BRIDGE 1 (OFFLINE): khi COMPLETED -> autoEmptyTable để staff thấy bàn trống.
     // BRIDGE 3: khi ONLINE COMPLETED -> cộng dồn chi tiêu và thăng hạng.
     Order order = findById(orderId);
     order.setStatus(newStatus);
+    if (actingStaffId != null) {
+      order.setStaff(userService.findById(actingStaffId));
+    }
 
     if (newStatus == OrderStatus.COMPLETED) {
       if (order.getType() == OrderType.ONLINE && order.getUser() != null) {
@@ -379,7 +386,7 @@ public class OrderServiceImpl implements OrderService {
     if (order.getStatus() != OrderStatus.PENDING) {
       throw new BusinessException("Chỉ được hủy đơn khi trạng thái là PENDING");
     }
-    return updateOrderStatus(orderId, OrderStatus.CANCELLED);
+    return updateOrderStatus(orderId, OrderStatus.CANCELLED, null);
   }
 
   private BigDecimal calcTotal(List<CartItem> cartItems) {
@@ -452,6 +459,11 @@ public class OrderServiceImpl implements OrderService {
     }
     order.setFinalPrice(finalPrice);
     return orderRepository.save(order);
+  }
+
+  @Override
+  public List<Order> findOrdersByTypeBetween(OrderType type, LocalDateTime from, LocalDateTime to) {
+    return orderRepository.findByTypeAndCreatedAtBetweenOrderByCreatedAtDesc(type, from, to);
   }
 }
 

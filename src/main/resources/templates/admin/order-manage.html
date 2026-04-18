@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="layout/main-layout :: head('Quản lý đơn hàng')"></th:block>
+</head>
+<body>
+<th:block th:replace="layout/sidebar-layout :: adminPage(${activeMenu}, ~{::section})">
+  <section>
+    <div class="container-fluid py-3">
+      <h3 class="mb-3">Quản lý đơn hàng</h3>
+
+      <form method="get" th:action="@{/admin/orders}" class="row g-2 align-items-end mb-3">
+        <input type="hidden" name="tab" th:value="${activeTab}">
+        <div class="col-auto">
+          <label class="form-label small mb-0">Khoảng thời gian</label>
+          <select class="form-select form-select-sm" name="period">
+            <option value="day" th:selected="${period == 'day'}">Theo ngày</option>
+            <option value="week" th:selected="${period == 'week'}">Theo tuần</option>
+            <option value="month" th:selected="${period == 'month'}">Theo tháng</option>
+          </select>
+        </div>
+        <div class="col-auto">
+          <label class="form-label small mb-0">Mốc ngày</label>
+          <input class="form-control form-control-sm" type="date" name="refDate" th:value="${refDate}">
+        </div>
+        <div class="col-auto">
+          <button class="btn btn-primary btn-sm" type="submit">Lọc</button>
+        </div>
+        <div class="col-12 small text-muted" th:text="${rangeLabel}">Range</div>
+      </form>
+
+      <ul class="nav nav-tabs mb-3">
+        <li class="nav-item">
+          <a class="nav-link"
+             th:classappend="${activeTab == 'offline'} ? 'active'"
+             th:href="@{/admin/orders(period=${period},refDate=${refDate},tab='offline')}">Đơn tại quán (offline)</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"
+             th:classappend="${activeTab == 'online'} ? 'active'"
+             th:href="@{/admin/orders(period=${period},refDate=${refDate},tab='online')}">Đơn online</a>
+        </li>
+      </ul>
+
+      <div class="tab-content">
+        <div th:class="${activeTab == 'offline'} ? 'tab-pane fade show active' : 'tab-pane fade'">
+          <div class="table-responsive">
+            <table class="table table-sm align-middle">
+              <thead>
+              <tr>
+                <th>Mã</th>
+                <th>Thời gian</th>
+                <th>Bàn</th>
+                <th>Nhân viên</th>
+                <th>Trạng thái</th>
+                <th class="text-end">Thanh toán</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="o : ${offlineOrders}">
+                <td th:text="${o.id}">0</td>
+                <td th:text="${o.createdAt != null ? #temporals.format(o.createdAt, 'dd/MM/yyyy HH:mm') : '-'}">-</td>
+                <td th:text="${o.table != null ? o.table.tableNumber : '-'}">-</td>
+                <td th:text="${o.staff != null ? o.staff.fullName : '—'}">-</td>
+                <td><span class="badge bg-secondary" th:text="${o.status}">-</span></td>
+                <td class="text-end" th:text="${#numbers.formatDecimal(o.finalPrice,0,'COMMA',0,'POINT')} + ' ₫'">0</td>
+                <td class="text-end">
+                  <a class="btn btn-sm btn-outline-primary" th:href="@{'/admin/orders/' + ${o.id}}">Chi tiết</a>
+                </td>
+              </tr>
+              <tr th:if="${#lists.isEmpty(offlineOrders)}">
+                <td colspan="7" class="text-muted">Không có đơn offline trong khoảng đã chọn.</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div th:class="${activeTab == 'online'} ? 'tab-pane fade show active' : 'tab-pane fade'">
+          <div class="table-responsive">
+            <table class="table table-sm align-middle">
+              <thead>
+              <tr>
+                <th>Mã</th>
+                <th>Thời gian</th>
+                <th>Địa chỉ giao</th>
+                <th>Nhân viên</th>
+                <th>Trạng thái</th>
+                <th class="text-end">Thanh toán</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="o : ${onlineOrders}">
+                <td th:text="${o.id}">0</td>
+                <td th:text="${o.createdAt != null ? #temporals.format(o.createdAt, 'dd/MM/yyyy HH:mm') : '-'}">-</td>
+                <td th:text="${o.deliveryAddress} ?: '-'">-</td>
+                <td th:text="${o.staff != null ? o.staff.fullName : '—'}">-</td>
+                <td><span class="badge bg-secondary" th:text="${o.status}">-</span></td>
+                <td class="text-end" th:text="${#numbers.formatDecimal(o.finalPrice,0,'COMMA',0,'POINT')} + ' ₫'">0</td>
+                <td class="text-end">
+                  <a class="btn btn-sm btn-outline-primary" th:href="@{'/admin/orders/' + ${o.id}}">Chi tiết</a>
+                </td>
+              </tr>
+              <tr th:if="${#lists.isEmpty(onlineOrders)}">
+                <td colspan="7" class="text-muted">Không có đơn online trong khoảng đã chọn.</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</th:block>
+
+<th:block th:replace="layout/main-layout :: scripts"></th:block>
+</body>
+</html>

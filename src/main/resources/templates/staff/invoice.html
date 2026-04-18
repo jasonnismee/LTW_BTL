@@ -18,6 +18,7 @@
       <div><b>Loại:</b> <span th:text="${order.type}">OFFLINE</span></div>
       <div><b>Trạng thái:</b> <span class="badge bg-success" th:text="${order.status}">COMPLETED</span></div>
       <div th:if="${order.table != null}"><b>Bàn:</b> <span th:text="${order.table.tableNumber}">1</span></div>
+      <div><b>Nhân viên:</b> <span th:text="${order.staff != null ? order.staff.fullName : '—'}">—</span></div>
       <hr>
       <h6 class="mb-2">Danh sách món</h6>
       <div class="table-responsive">

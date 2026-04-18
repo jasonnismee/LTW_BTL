@@ -74,16 +74,17 @@ public class VoucherServiceImpl implements VoucherService {
     voucher.setMaxDiscountAmount(dto.getMaxDiscountAmount());
     voucher.setMinOrderAmount(dto.getMinOrderAmount() == null ? BigDecimal.ZERO : dto.getMinOrderAmount());
     voucher.setType(dto.getType());
-    voucher.setMinRank(dto.getMinRank());
+    if (dto.getType() == VoucherType.OFFLINE_ALL) {
+      voucher.setMinRank(null);
+    } else {
+      voucher.setMinRank(dto.getMinRank());
+    }
     voucher.setQuantity(dto.getQuantity());
     voucher.setUsedCount(0);
     voucher.setStartDate(dto.getStartDate());
     voucher.setEndDate(dto.getEndDate());
     voucher.setStatus(dto.getStatus());
 
-    if (voucher.getType() == VoucherType.ONLINE_RANK_ONLY && voucher.getMinRank() == null) {
-      throw new BusinessException("Voucher ONLINE_RANK_ONLY phải có minRank");
-    }
     return voucherRepository.save(voucher);
   }
 
@@ -94,15 +95,16 @@ public class VoucherServiceImpl implements VoucherService {
     voucher.setMaxDiscountAmount(dto.getMaxDiscountAmount());
     voucher.setMinOrderAmount(dto.getMinOrderAmount() == null ? BigDecimal.ZERO : dto.getMinOrderAmount());
     voucher.setType(dto.getType());
-    voucher.setMinRank(dto.getMinRank());
+    if (dto.getType() == VoucherType.OFFLINE_ALL) {
+      voucher.setMinRank(null);
+    } else {
+      voucher.setMinRank(dto.getMinRank());
+    }
     voucher.setQuantity(dto.getQuantity());
     voucher.setStartDate(dto.getStartDate());
     voucher.setEndDate(dto.getEndDate());
     voucher.setStatus(dto.getStatus());
 
-    if (voucher.getType() == VoucherType.ONLINE_RANK_ONLY && voucher.getMinRank() == null) {
-      throw new BusinessException("Voucher ONLINE_RANK_ONLY phải có minRank");
-    }
     return voucherRepository.save(voucher);
   }
 

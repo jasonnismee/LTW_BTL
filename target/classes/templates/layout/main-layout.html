@@ -34,14 +34,18 @@
             th:if="${#authorization.expression('hasRole(''CUSTOMER'')')}">
           <a class="nav-link" th:href="@{/customer/orders}">Đơn của tôi</a>
         </li>
+        <li class="nav-item"
+            th:if="${#authorization.expression('hasRole(''CUSTOMER'')')}">
+          <a class="nav-link" th:href="@{/customer/account}">Tài khoản</a>
+        </li>
 
         <!-- STAFF navigation -->
         <li class="nav-item"
-            th:if="${#authorization.expression('hasAnyRole(''STAFF'',''ADMIN'')')}">
+            th:if="${#authorization.expression('hasRole(''STAFF'')')}">
           <a class="nav-link" th:href="@{/staff/pos}">POS</a>
         </li>
         <li class="nav-item"
-            th:if="${#authorization.expression('hasAnyRole(''STAFF'',''ADMIN'')')}">
+            th:if="${#authorization.expression('hasRole(''STAFF'')')}">
           <a class="nav-link" th:href="@{/staff/orders/online}">Đơn online</a>
         </li>
 

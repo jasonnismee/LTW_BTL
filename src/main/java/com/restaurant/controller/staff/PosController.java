@@ -10,6 +10,7 @@ import com.restaurant.service.MenuItemService;
 import com.restaurant.service.OrderService;
 import com.restaurant.service.RestaurantTableService;
 import com.restaurant.service.VoucherService;
+import com.restaurant.util.SecurityUtils;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
@@ -25,7 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/staff/pos")
-@PreAuthorize("hasAnyRole('STAFF','ADMIN')")
+@PreAuthorize("hasRole('STAFF')")
 public class PosController {
   private final RestaurantTableService tableService;
   private final MenuItemService menuItemService;
@@ -124,8 +125,9 @@ public class PosController {
                     OrderDTO orderForm,
                     @RequestParam(value = "voucherId", required = false) Long voucherId,
                     RedirectAttributes redirectAttributes) {
-    Order checkedOut = orderService.checkoutOpenOfflineOrder(tableId, orderForm, voucherId);
-    Order completed = orderService.updateOrderStatus(checkedOut.getId(), com.restaurant.model.enums.OrderStatus.COMPLETED);
+    Long staffId = SecurityUtils.currentUserId();
+    Order checkedOut = orderService.checkoutOpenOfflineOrder(tableId, orderForm, voucherId, staffId);
+    Order completed = orderService.updateOrderStatus(checkedOut.getId(), com.restaurant.model.enums.OrderStatus.COMPLETED, staffId);
 
     redirectAttributes.addFlashAttribute("success", "Thanh toán thành công");
     return "redirect:/staff/pos/invoice?orderId=" + completed.getId();

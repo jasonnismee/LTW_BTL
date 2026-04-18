@@ -3,7 +3,6 @@ package com.restaurant.controller.admin;
 import com.restaurant.model.entity.User;
 import com.restaurant.model.enums.UserRole;
 import com.restaurant.repository.UserRepository;
-import com.restaurant.service.OrderService;
 import com.restaurant.service.UserService;
 import java.util.List;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,12 +20,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminUserController {
   private final UserService userService;
-  private final OrderService orderService;
   private final UserRepository userRepository;
 
-  public AdminUserController(UserService userService, OrderService orderService, UserRepository userRepository) {
+  public AdminUserController(UserService userService, UserRepository userRepository) {
     this.userService = userService;
-    this.orderService = orderService;
     this.userRepository = userRepository;
   }
 
@@ -65,12 +62,4 @@ public class AdminUserController {
     redirectAttributes.addFlashAttribute("success", "Đã mở khóa tài khoản");
     return "redirect:/admin/users";
   }
-
-  @GetMapping("/{id}/orders")
-  public String orders(@PathVariable("id") Long id, Model model) {
-    model.addAttribute("user", userService.findById(id));
-    model.addAttribute("orders", orderService.getOrdersByUser(id));
-    return "admin/user-orders";
-  }
 }
-

@@ -54,6 +54,7 @@
             <a class="btn btn-sm btn-outline-secondary" th:href="@{'/customer/menu/' + ${item.id}}">Chi tiết</a>
             <form class="d-flex gap-2 ms-auto" th:action="@{/customer/cart/add}" method="post">
               <input type="hidden" name="menuItemId" th:value="${item.id}">
+              <input type="hidden" name="returnUrl" th:value="@{/customer/home(q=${q},categoryId=${categoryId})}">
               <input type="number" name="quantity" value="1" min="1" class="form-control form-control-sm" style="width: 80px;">
               <button class="btn btn-sm btn-primary" type="submit">Thêm</button>
             </form>

@@ -34,6 +34,11 @@ public class Order extends BaseEntity {
   @JoinColumn(name = "table_id", nullable = true)
   private RestaurantTable table;
 
+  /** Nhân viên phụ trách (thanh toán POS / xử lý đơn online). */
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "staff_id", nullable = true)
+  private User staff;
+
   @NotNull
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, length = 20)
@@ -105,6 +110,14 @@ public class Order extends BaseEntity {
 
   public void setTable(RestaurantTable table) {
     this.table = table;
+  }
+
+  public User getStaff() {
+    return staff;
+  }
+
+  public void setStaff(User staff) {
+    this.staff = staff;
   }
 
   public OrderType getType() {
