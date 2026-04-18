@@ -66,13 +66,10 @@
 <div th:fragment="staffPage(activeMenu, content)">
   <th:block th:replace="layout/main-layout :: topnav"></th:block>
   <div class="container-fluid">
-    <div class="row">
-      <th:block th:replace="layout/sidebar-layout :: staffSidebar(${activeMenu})"></th:block>
-      <main class="col-12 col-md-10 py-3">
-        <th:block th:replace="layout/sidebar-layout :: alerts"></th:block>
-        <th:block th:replace="${content}"></th:block>
-      </main>
-    </div>
+    <main class="col-12 py-3">
+      <th:block th:replace="layout/sidebar-layout :: alerts"></th:block>
+      <th:block th:replace="${content}"></th:block>
+    </main>
   </div>
 </div>
 </body>

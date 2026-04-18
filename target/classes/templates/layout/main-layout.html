@@ -48,6 +48,10 @@
             th:if="${#authorization.expression('hasRole(''STAFF'')')}">
           <a class="nav-link" th:href="@{/staff/orders/online}">Đơn online</a>
         </li>
+        <li class="nav-item"
+            th:if="${#authorization.expression('hasRole(''STAFF'')')}">
+          <a class="nav-link" th:href="@{/staff/account}">Thông tin nhân viên</a>
+        </li>
 
         <!-- ADMIN shortcut -->
         <li class="nav-item"
