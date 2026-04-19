@@ -24,13 +24,13 @@ public class CategoryServiceImpl implements CategoryService {
   @Override
   @Transactional(readOnly = true)
   public List<Category> getAllCategories() {
-    return categoryRepository.findAll();
+    return categoryRepository.findByIsDeletedFalse();
   }
 
   @Override
   public Category createCategory(String name) {
     String normalized = normalizeName(name);
-    if (categoryRepository.existsByNameIgnoreCase(normalized)) {
+    if (categoryRepository.existsByNameIgnoreCaseAndIsDeletedFalse(normalized)) {
       throw new BusinessException("Tên danh mục đã tồn tại");
     }
     Category c = new Category();
@@ -42,8 +42,11 @@ public class CategoryServiceImpl implements CategoryService {
   public Category updateCategory(Long id, String name) {
     Category c = categoryRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy category id=" + id));
+    if (Boolean.TRUE.equals(c.getIsDeleted())) {
+      throw new ResourceNotFoundException("Không tìm thấy category id=" + id);
+    }
     String normalized = normalizeName(name);
-    categoryRepository.findByNameIgnoreCase(normalized)
+    categoryRepository.findByNameIgnoreCaseAndIsDeletedFalse(normalized)
         .filter(existing -> !existing.getId().equals(id))
         .ifPresent(existing -> {
           throw new BusinessException("Tên danh mục đã tồn tại");
@@ -56,11 +59,16 @@ public class CategoryServiceImpl implements CategoryService {
   public void deleteCategory(Long id) {
     Category c = categoryRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy category id=" + id));
+    if (Boolean.TRUE.equals(c.getIsDeleted())) {
+      throw new ResourceNotFoundException("Không tìm thấy category id=" + id);
+    }
     boolean hasMenuItems = menuItemRepository.findByCategoryId(id).stream().findAny().isPresent();
     if (hasMenuItems) {
       throw new BusinessException("Không thể xóa danh mục vì còn món ăn");
     }
-    categoryRepository.delete(c);
+    c.setIsDeleted(true);
+    c.setName(c.getName() + "_DEL_" + System.currentTimeMillis());
+    categoryRepository.save(c);
   }
 
   private String normalizeName(String name) {
@@ -70,4 +78,3 @@ public class CategoryServiceImpl implements CategoryService {
     return name.trim();
   }
 }
-

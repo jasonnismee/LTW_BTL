@@ -21,12 +21,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(
-    name = "vouchers",
-    uniqueConstraints = {
-      @UniqueConstraint(name = "uk_vouchers_code", columnNames = "code")
-    }
-)
+@Table(name = "vouchers", uniqueConstraints = {
+    @UniqueConstraint(name = "uk_vouchers_code", columnNames = "code")
+})
 public class Voucher extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -79,6 +76,10 @@ public class Voucher extends BaseEntity {
   @NotNull
   @Column(nullable = false)
   private Boolean status = Boolean.TRUE;
+
+  @NotNull
+  @Column(nullable = false)
+  private Boolean isDeleted = false;
 
   public Long getId() {
     return id;
@@ -175,5 +176,12 @@ public class Voucher extends BaseEntity {
   public void setStatus(Boolean status) {
     this.status = status;
   }
-}
 
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
+}

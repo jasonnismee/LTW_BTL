@@ -10,12 +10,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface VoucherRepository extends JpaRepository<Voucher, Long> {
-  boolean existsByCode(String code);
+  boolean existsByCodeAndIsDeletedFalse(String code);
+
+  List<Voucher> findByIsDeletedFalse();
 
   @Query("""
       select v
       from Voucher v
-      where v.status = true
+      where v.status = true and v.isDeleted = false
         and :now between v.startDate and v.endDate
         and (v.quantity = -1 or v.usedCount < v.quantity)
       order by v.discountPercent desc
@@ -25,7 +27,7 @@ public interface VoucherRepository extends JpaRepository<Voucher, Long> {
   @Query("""
       select v
       from Voucher v
-      where v.status = true
+      where v.status = true and v.isDeleted = false
         and :now between v.startDate and v.endDate
         and (v.quantity = -1 or v.usedCount < v.quantity)
         and v.type = :type
@@ -36,7 +38,7 @@ public interface VoucherRepository extends JpaRepository<Voucher, Long> {
   @Query("""
       select v
       from Voucher v
-      where v.status = true
+      where v.status = true and v.isDeleted = false
         and :now between v.startDate and v.endDate
         and (v.quantity = -1 or v.usedCount < v.quantity)
         and v.type = com.restaurant.model.enums.VoucherType.ONLINE_RANK_ONLY
@@ -44,6 +46,5 @@ public interface VoucherRepository extends JpaRepository<Voucher, Long> {
       order by v.discountPercent desc
       """)
   List<Voucher> findOnlineAvailableForRanks(@Param("allowedRanks") List<UserRank> allowedRanks,
-                                           @Param("now") LocalDateTime now);
+      @Param("now") LocalDateTime now);
 }
-

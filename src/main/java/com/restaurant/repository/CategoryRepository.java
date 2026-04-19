@@ -1,12 +1,14 @@
 package com.restaurant.repository;
 
 import com.restaurant.model.entity.Category;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-  Optional<Category> findByNameIgnoreCase(String name);
+  Optional<Category> findByNameIgnoreCaseAndIsDeletedFalse(String name);
 
-  boolean existsByNameIgnoreCase(String name);
+  boolean existsByNameIgnoreCaseAndIsDeletedFalse(String name);
+
+  List<Category> findByIsDeletedFalse();
 }
-

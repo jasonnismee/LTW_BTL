@@ -29,14 +29,18 @@ public class VoucherServiceImpl implements VoucherService {
   @Override
   @Transactional(readOnly = true)
   public List<Voucher> getAll() {
-    return voucherRepository.findAll();
+    return voucherRepository.findByIsDeletedFalse();
   }
 
   @Override
   @Transactional(readOnly = true)
   public Voucher findById(Long id) {
-    return voucherRepository.findById(id)
+    Voucher v = voucherRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy voucher id=" + id));
+    if (Boolean.TRUE.equals(v.getIsDeleted())) {
+      throw new ResourceNotFoundException("Không tìm thấy voucher id=" + id);
+    }
+    return v;
   }
 
   @Override
@@ -65,7 +69,7 @@ public class VoucherServiceImpl implements VoucherService {
     if (normalizedCode == null || normalizedCode.isBlank()) {
       throw new BusinessException("Voucher code không hợp lệ");
     }
-    if (voucherRepository.existsByCode(normalizedCode)) {
+    if (voucherRepository.existsByCodeAndIsDeletedFalse(normalizedCode)) {
       throw new BusinessException("Voucher code đã tồn tại");
     }
 
@@ -142,7 +146,8 @@ public class VoucherServiceImpl implements VoucherService {
     if (now.isBefore(voucher.getStartDate()) || now.isAfter(voucher.getEndDate())) {
       return new VoucherResult(false, BigDecimal.ZERO, totalPrice, "Voucher đã hết hạn");
     }
-    if (!(voucher.getQuantity() != null && (voucher.getQuantity() == -1 || voucher.getUsedCount() < voucher.getQuantity()))) {
+    if (!(voucher.getQuantity() != null
+        && (voucher.getQuantity() == -1 || voucher.getUsedCount() < voucher.getQuantity()))) {
       return new VoucherResult(false, BigDecimal.ZERO, totalPrice, "Voucher đã hết lượt sử dụng");
     }
     BigDecimal minOrder = voucher.getMinOrderAmount() == null ? BigDecimal.ZERO : voucher.getMinOrderAmount();
@@ -158,7 +163,8 @@ public class VoucherServiceImpl implements VoucherService {
       }
     }
 
-    BigDecimal percent = BigDecimal.valueOf(voucher.getDiscountPercent()).divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP);
+    BigDecimal percent = BigDecimal.valueOf(voucher.getDiscountPercent()).divide(BigDecimal.valueOf(100), 4,
+        RoundingMode.HALF_UP);
     BigDecimal discount = totalPrice.multiply(percent).setScale(2, RoundingMode.HALF_UP);
     if (voucher.getMaxDiscountAmount() != null) {
       discount = discount.min(voucher.getMaxDiscountAmount());
@@ -183,10 +189,10 @@ public class VoucherServiceImpl implements VoucherService {
 
   @Override
   public void delete(Long id) {
-    if (!voucherRepository.existsById(id)) {
-      throw new ResourceNotFoundException("Không tìm thấy voucher id=" + id);
-    }
-    voucherRepository.deleteById(id);
+    Voucher voucher = findById(id);
+    voucher.setIsDeleted(true);
+    voucher.setCode(voucher.getCode() + "_DEL_" + System.currentTimeMillis());
+    voucherRepository.save(voucher);
   }
 
   private List<UserRank> allowedRanks(UserRank rank) {
@@ -200,4 +206,3 @@ public class VoucherServiceImpl implements VoucherService {
     return allowed;
   }
 }
-

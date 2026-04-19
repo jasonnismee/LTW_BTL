@@ -8,15 +8,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(
-    name = "categories",
-    uniqueConstraints = {
-      @UniqueConstraint(name = "uk_categories_name", columnNames = "name")
-    }
-)
+@Table(name = "categories", uniqueConstraints = {
+    @UniqueConstraint(name = "uk_categories_name", columnNames = "name")
+})
 public class Category extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +30,10 @@ public class Category extends BaseEntity {
 
   @Column(nullable = false)
   private Integer displayOrder = 0;
+
+  @NotNull
+  @Column(nullable = false)
+  private Boolean isDeleted = false;
 
   public Long getId() {
     return id;
@@ -64,5 +66,12 @@ public class Category extends BaseEntity {
   public void setDisplayOrder(Integer displayOrder) {
     this.displayOrder = displayOrder;
   }
-}
 
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
+}

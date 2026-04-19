@@ -30,9 +30,9 @@ public class MenuItemServiceImpl implements MenuItemService {
   private final String webPathPrefix;
 
   public MenuItemServiceImpl(MenuItemRepository menuItemRepository,
-                             CategoryRepository categoryRepository,
-                             @Value("${app.upload.dir}") String uploadDir,
-                             @Value("${app.upload.web-path-prefix}") String webPathPrefix) {
+      CategoryRepository categoryRepository,
+      @Value("${app.upload.dir}") String uploadDir,
+      @Value("${app.upload.web-path-prefix}") String webPathPrefix) {
     this.menuItemRepository = menuItemRepository;
     this.categoryRepository = categoryRepository;
     this.uploadDir = Paths.get(uploadDir).toAbsolutePath().normalize();
@@ -48,7 +48,7 @@ public class MenuItemServiceImpl implements MenuItemService {
   @Override
   @Transactional(readOnly = true)
   public List<MenuItem> getAll() {
-    return menuItemRepository.findAll();
+    return menuItemRepository.findByStatusNot(MenuItemStatus.DELETED);
   }
 
   @Override
@@ -121,10 +121,9 @@ public class MenuItemServiceImpl implements MenuItemService {
 
   @Override
   public void delete(Long id) {
-    if (!menuItemRepository.existsById(id)) {
-      throw new ResourceNotFoundException("Không tìm thấy menu item id=" + id);
-    }
-    menuItemRepository.deleteById(id);
+    MenuItem item = getById(id);
+    item.setStatus(MenuItemStatus.DELETED);
+    menuItemRepository.save(item);
   }
 
   private String storeImage(MultipartFile file) {
@@ -159,4 +158,3 @@ public class MenuItemServiceImpl implements MenuItemService {
     return p;
   }
 }
-
