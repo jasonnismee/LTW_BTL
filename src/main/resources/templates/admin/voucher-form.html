@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:replace="layout/main-layout :: head('Tạo Voucher')"></th:block>
+  <th:block th:replace="~{layout/main-layout :: head('Tạo Voucher')}"></th:block>
 </head>
 <body>
-<th:block th:replace="layout/sidebar-layout :: adminPage(${activeMenu}, ~{::section})">
+<th:block th:replace="~{layout/sidebar-layout :: adminPage(${activeMenu}, ~{::section})}">
   <section>
     <div class="container-fluid py-3" style="max-width: 920px;">
       <div class="d-flex justify-content-between align-items-center mb-3">
@@ -116,7 +116,7 @@
   </section>
 </th:block>
 
-<th:block th:replace="layout/main-layout :: scripts"></th:block>
+<th:block th:replace="~{layout/main-layout :: scripts}"></th:block>
 <script>
   (function () {
     var typeSel = document.getElementById('voucherTypeSelect');

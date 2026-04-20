@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:replace="layout/main-layout :: head('Đăng ký')"></th:block>
+  <th:block th:replace="~{layout/main-layout :: head('Đăng ký')}"></th:block>
 </head>
 <body>
-<th:block th:replace="layout/main-layout :: topnav"></th:block>
+<th:block th:replace="~{layout/main-layout :: topnav}"></th:block>
 
 <div class="container py-5" style="max-width: 560px;">
   <h3 class="mb-3">Đăng ký tài khoản</h3>
@@ -38,7 +38,7 @@
   </form>
 </div>
 
-<th:block th:replace="layout/main-layout :: scripts"></th:block>
+<th:block th:replace="~{layout/main-layout :: scripts}"></th:block>
 </body>
 </html>
 

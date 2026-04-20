@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:replace="layout/main-layout :: head('Quản lý Menu')"></th:block>
+  <th:block th:replace="~{layout/main-layout :: head('Quản lý Menu')}"></th:block>
 </head>
 <body>
-<th:block th:replace="layout/sidebar-layout :: adminPage(${activeMenu}, ~{::section})">
+<th:block th:replace="~{layout/sidebar-layout :: adminPage(${activeMenu}, ~{::section})}">
   <section>
     <div class="container py-4">
       <h3 class="mb-3">Quản lý Menu</h3>
@@ -108,7 +108,7 @@
   </section>
 </th:block>
 
-<th:block th:replace="layout/main-layout :: scripts"></th:block>
+<th:block th:replace="~{layout/main-layout :: scripts}"></th:block>
 </body>
 </html>
 

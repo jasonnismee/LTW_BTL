@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:replace="layout/main-layout :: head('Admin Dashboard')"></th:block>
+  <th:block th:replace="~{layout/main-layout :: head('Admin Dashboard')}"></th:block>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
-<th:block th:replace="layout/sidebar-layout :: adminPage(${activeMenu}, ~{::section})">
+<th:block th:replace="~{layout/sidebar-layout :: adminPage(${activeMenu}, ~{::section})}">
   <section>
     <div class="container py-4">
       <h3 class="mb-3">Dashboard</h3>
@@ -79,7 +79,7 @@
   </section>
 </th:block>
 
-<th:block th:replace="layout/main-layout :: scripts"></th:block>
+<th:block th:replace="~{layout/main-layout :: scripts}"></th:block>
 <script th:inline="javascript">
   const labels = [[${chartLabels}]];
   const values = [[${chartValues}]];

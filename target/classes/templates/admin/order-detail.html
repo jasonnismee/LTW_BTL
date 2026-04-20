@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:replace="layout/main-layout :: head('Chi tiết đơn hàng')"></th:block>
+  <th:block th:replace="~{layout/main-layout :: head('Chi tiết đơn hàng')}"></th:block>
 </head>
 <body>
-<th:block th:replace="layout/sidebar-layout :: adminPage(${activeMenu}, ~{::section})">
+<th:block th:replace="~{layout/sidebar-layout :: adminPage(${activeMenu}, ~{::section})}">
   <section>
     <div class="container-fluid py-3" style="max-width: 900px;">
       <a th:href="@{/admin/orders}" class="btn btn-link px-0"><i class="bi bi-arrow-left"></i> Quay lại</a>
@@ -79,6 +79,6 @@
   </section>
 </th:block>
 
-<th:block th:replace="layout/main-layout :: scripts"></th:block>
+<th:block th:replace="~{layout/main-layout :: scripts}"></th:block>
 </body>
 </html>

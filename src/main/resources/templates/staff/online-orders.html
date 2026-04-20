@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:replace="layout/main-layout :: head('Online Orders')"></th:block>
+  <th:block th:replace="~{layout/main-layout :: head('Online Orders')}"></th:block>
 </head>
 <body>
-<th:block th:replace="layout/main-layout :: topnav"></th:block>
+<th:block th:replace="~{layout/main-layout :: topnav}"></th:block>
 
 <div class="container py-4">
   <h3 class="mb-3">Đơn ONLINE</h3>
@@ -51,7 +51,7 @@
   </div>
 </div>
 
-<th:block th:replace="layout/main-layout :: scripts"></th:block>
+<th:block th:replace="~{layout/main-layout :: scripts}"></th:block>
 </body>
 </html>
 

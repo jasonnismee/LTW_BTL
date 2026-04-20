@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:replace="layout/main-layout :: head('Lịch sử đơn hàng')"></th:block>
+  <th:block th:replace="~{layout/main-layout :: head('Lịch sử đơn hàng')}"></th:block>
 </head>
 <body>
-<th:block th:replace="layout/main-layout :: topnav"></th:block>
+<th:block th:replace="~{layout/main-layout :: topnav}"></th:block>
 
 <div class="container py-4">
   <h3 class="mb-3">Lịch sử đơn hàng</h3>
@@ -67,8 +67,8 @@
   </nav>
 </div>
 
-<th:block th:replace="layout/main-layout :: footer"></th:block>
-<th:block th:replace="layout/main-layout :: scripts"></th:block>
+<th:block th:replace="~{layout/main-layout :: footer}"></th:block>
+<th:block th:replace="~{layout/main-layout :: scripts}"></th:block>
 </body>
 </html>
 

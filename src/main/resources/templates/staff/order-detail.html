@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:replace="layout/main-layout :: head('Chi tiết đơn online')"></th:block>
+  <th:block th:replace="~{layout/main-layout :: head('Chi tiết đơn online')}"></th:block>
 </head>
 <body>
-<th:block th:replace="layout/main-layout :: topnav"></th:block>
+<th:block th:replace="~{layout/main-layout :: topnav}"></th:block>
 
 <div class="container py-4" style="max-width: 900px;">
   <a th:href="@{/staff/orders/online}" class="btn btn-link px-0"><i class="bi bi-arrow-left"></i> Quay lại</a>
@@ -55,7 +55,7 @@
   </div>
 </div>
 
-<th:block th:replace="layout/main-layout :: scripts"></th:block>
+<th:block th:replace="~{layout/main-layout :: scripts}"></th:block>
 </body>
 </html>
 

@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:replace="layout/main-layout :: head('Tài khoản')"></th:block>
+  <th:block th:replace="~{layout/main-layout :: head('Tài khoản')}"></th:block>
 </head>
 <body>
-<th:block th:replace="layout/sidebar-layout :: staffPage(${activeMenu}, ~{::section})">
+<th:block th:replace="~{layout/sidebar-layout :: staffPage(${activeMenu}, ~{::section})}">
   <section>
     <div class="container-fluid py-3" style="max-width: 640px;">
       <h3 class="mb-3">Quản lý thông tin nhân viên</h3>
@@ -63,6 +63,6 @@
     </div>
   </section>
 </th:block>
-<th:block th:replace="layout/main-layout :: scripts"></th:block>
+<th:block th:replace="~{layout/main-layout :: scripts}"></th:block>
 </body>
 </html>

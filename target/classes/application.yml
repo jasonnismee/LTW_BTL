@@ -13,7 +13,7 @@ spring:
   # ddl-auto create: mỗi lần khởi động app xóa và tạo lại bảng từ entity (reset về trạng thái gốc), sau đó DataSeeder nạp dữ liệu mẫu.
   # Khi triển khai thật, đổi ddl-auto thành validate hoặc update và bỏ createDatabaseIfNotExist nếu không cần.
   datasource:
-    url: jdbc:mysql://localhost:3306/restaurant_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+    url: jdbc:mysql://localhost:3306/restaurant_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh&characterEncoding=UTF-8
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver

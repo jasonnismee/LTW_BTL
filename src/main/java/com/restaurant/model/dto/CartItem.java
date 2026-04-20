@@ -10,7 +10,8 @@ public class CartItem implements Serializable {
   private Integer quantity;
   private BigDecimal subtotal;
 
-  public CartItem() {}
+  public CartItem() {
+  }
 
   public CartItem(Long menuItemId, String menuItemName, BigDecimal unitPrice, Integer quantity) {
     this.menuItemId = menuItemId;
@@ -50,7 +51,7 @@ public class CartItem implements Serializable {
 
   public void setUnitPrice(BigDecimal unitPrice) {
     this.unitPrice = unitPrice;
-    recalcSubtotal();
+    // recalcSubtotal();
   }
 
   public Integer getQuantity() {
@@ -70,4 +71,3 @@ public class CartItem implements Serializable {
     this.subtotal = subtotal;
   }
 }
-
