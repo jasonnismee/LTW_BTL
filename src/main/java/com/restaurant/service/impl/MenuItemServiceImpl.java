@@ -92,23 +92,6 @@ public class MenuItemServiceImpl implements MenuItemService {
   }
 
   @Override
-  public MenuItem update(Long id, MenuItemDTO dto) {
-    MenuItem item = getById(id);
-    Category category = categoryRepository.findById(dto.getCategoryId())
-        .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy category id=" + dto.getCategoryId()));
-
-    item.setName(dto.getName().trim());
-    item.setPrice(dto.getPrice());
-    item.setDescription(dto.getDescription());
-    item.setCategory(category);
-
-    if (dto.getImageFile() != null && !dto.getImageFile().isEmpty()) {
-      item.setImageUrl(storeImage(dto.getImageFile()));
-    }
-    return menuItemRepository.save(item);
-  }
-
-  @Override
   public MenuItem toggleStatus(Long id) {
     MenuItem item = getById(id);
     if (item.getStatus() == MenuItemStatus.AVAILABLE) {

@@ -49,10 +49,10 @@ public class CartItem implements Serializable {
     return unitPrice;
   }
 
-  public void setUnitPrice(BigDecimal unitPrice) {
-    this.unitPrice = unitPrice;
-    // recalcSubtotal();
-  }
+  // public void setUnitPrice(BigDecimal unitPrice) {
+  // this.unitPrice = unitPrice;
+  // // recalcSubtotal();
+  // }
 
   public Integer getQuantity() {
     return quantity;

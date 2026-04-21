@@ -17,10 +17,7 @@ public interface MenuItemService {
 
   MenuItem create(MenuItemDTO dto);
 
-  MenuItem update(Long id, MenuItemDTO dto);
-
   MenuItem toggleStatus(Long id);
 
   void delete(Long id);
 }
-

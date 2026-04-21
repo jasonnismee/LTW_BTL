@@ -191,7 +191,6 @@ public class VoucherServiceImpl implements VoucherService {
   public void delete(Long id) {
     Voucher voucher = findById(id);
     voucher.setIsDeleted(true);
-    voucher.setCode(voucher.getCode() + "_DEL_" + System.currentTimeMillis());
     voucherRepository.save(voucher);
   }
 

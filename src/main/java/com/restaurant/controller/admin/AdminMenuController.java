@@ -53,8 +53,8 @@ public class AdminMenuController {
 
   @PutMapping("/category/{id}")
   public String updateCategory(@PathVariable("id") Long id,
-                               @RequestParam("name") String name,
-                               RedirectAttributes redirectAttributes) {
+      @RequestParam("name") String name,
+      RedirectAttributes redirectAttributes) {
     categoryService.updateCategory(id, name);
     redirectAttributes.addFlashAttribute("success", "Đã cập nhật danh mục");
     return "redirect:/admin/menu";
@@ -68,7 +68,8 @@ public class AdminMenuController {
   }
 
   @PostMapping("/item")
-  public String createItem(@Valid MenuItemDTO menuItem, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+  public String createItem(@Valid MenuItemDTO menuItem, BindingResult bindingResult,
+      RedirectAttributes redirectAttributes) {
     if (bindingResult.hasErrors()) {
       redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.menuItem", bindingResult);
       redirectAttributes.addFlashAttribute("menuItem", menuItem);
@@ -77,22 +78,6 @@ public class AdminMenuController {
     }
     menuItemService.create(menuItem);
     redirectAttributes.addFlashAttribute("success", "Đã tạo món ăn");
-    return "redirect:/admin/menu";
-  }
-
-  @PutMapping("/item/{id}")
-  public String updateItem(@PathVariable("id") Long id,
-                           @Valid MenuItemDTO menuItem,
-                           BindingResult bindingResult,
-                           RedirectAttributes redirectAttributes) {
-    if (bindingResult.hasErrors()) {
-      redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.menuItem", bindingResult);
-      redirectAttributes.addFlashAttribute("menuItem", menuItem);
-      redirectAttributes.addFlashAttribute("error", "Vui lòng kiểm tra lại thông tin món ăn");
-      return "redirect:/admin/menu";
-    }
-    menuItemService.update(id, menuItem);
-    redirectAttributes.addFlashAttribute("success", "Đã cập nhật món ăn");
     return "redirect:/admin/menu";
   }
 
@@ -110,4 +95,3 @@ public class AdminMenuController {
     return "redirect:/admin/menu";
   }
 }
-
